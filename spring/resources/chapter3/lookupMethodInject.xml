@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans  xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+    
+    <!-- prototype -->
+    <bean id="prototypePrinter" class="cn.javass.spring.chapter3.bean.Printer" scope="prototype"/>
+    <!-- singleton -->
+    <bean id="singletonPrinter" class="cn.javass.spring.chapter3.bean.Printer" scope="singleton"/>
+
+
+    <bean id="helloApi1" class="cn.javass.spring.chapter3.HelloImpl5" scope="singleton" init-method="init" destroy-method="destroy">
+        <property name="printer" ref="prototypePrinter"/>
+        <!-- 抽象方法createPrototypePrinter依赖一个prototype的类型 -->
+        <lookup-method name="createPrototypePrinter" bean="prototypePrinter"/>
+        <lookup-method name="createSingletonPrinter" bean="singletonPrinter"/>
+    </bean>           
+    
+    <bean id="helloApi2" class="cn.javass.spring.chapter3.HelloImpl5" scope="prototype" init-method="init" destroy-method="destroy">
+        <property name="printer" ref="prototypePrinter"/>
+        <lookup-method name="createPrototypePrinter" bean="prototypePrinter"/>
+        <lookup-method name="createSingletonPrinter" bean="singletonPrinter"/>
+    </bean>    
+    
+     <bean id="inittest" class="cn.javass.spring.chapter3.HelloApiInitAndDestoryTest" init-method="init" destroy-method="destroy" ></bean>  
+     <bean id="inittest1" class="cn.javass.spring.chapter3.HelloApiInitAndDestoryTest2" init-method="init" destroy-method="destroy" scope="prototype"></bean>   
+     <bean id="initByspring" class="cn.javass.spring.chapter3.HelloApiInitByspringBean"></bean>    
+          
+</beans>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<!-- 
+	    ResourceBean被dependentbean依赖，先开始执行初始化操作 DependentBean依赖resourcebean，其次进行初始化 
+		DependentBean依赖resourcebean，依赖者先要被销毁 ResourceBean被dependentbean依赖最后被销毁 ，如果有多个bean对资源进行依赖，将按照xml中生命的顺序进行初始化和销毁
+		总结：依赖的bean的初始化顺序和销毁的顺序遵循“先进后出”的原则，即最新被初始化的最后被销毁
+			-->
+	<bean id="resourceBean" class="cn.javass.spring.chapter3.bean.ResourceBean"
+		init-method="init" destroy-method="destroy" lazy-init="true">
+		<property name="file" value="D:/test1.txt" />
+	</bean>
+	    <bean id="dependentBean2" class="cn.javass.spring.chapter3.bean.DependentBean2"
+		init-method="init" destroy-method="destroy" depends-on="resourceBean">
+		<property name="resourceBean" ref="resourceBean" />
+	</bean>
+
+	<bean id="dependentBean1" class="cn.javass.spring.chapter3.bean.DependentBean"
+		init-method="init" destroy-method="destroy" depends-on="resourceBean">
+		<property name="resourceBean" ref="resourceBean" />
+	</bean>
+	
+
+
+
+</beans>
